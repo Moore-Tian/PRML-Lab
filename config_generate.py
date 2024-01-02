@@ -29,12 +29,12 @@ if __name__ == "__main__":
     parser.add_argument("--train_list", type=str, default="./filelists/train.txt", help="path to train list")
     parser.add_argument("--val_list", type=str, default="./filelists/val.txt", help="path to val list")
     parser.add_argument("--source_dir", type=str, default="./dataset/44k", help="path to source dir")
-    parser.add_argument("--speech_encoder", type=str, default="vec768l12", help="choice a speech encoder|'vec768l12','vec256l9','hubertsoft','whisper-ppg','cnhubertlarge','dphubert','whisper-ppg-large','wavlmbase+'")
+    parser.add_argument("--speech_encoder", type=str, default="vec768l12", help="choice a speech encoder|'vec768l12','vec256l9','hubertsoft','whisper-ppg','cnhubertlarge','dphubert'")
     parser.add_argument("--vol_aug", action="store_true", help="Whether to use volume embedding and volume augmentation")
     parser.add_argument("--tiny", action="store_true", help="Whether to train sovits tiny")
     args = parser.parse_args()
     
-    config_template =  json.load(open("configs_template/config_tiny_template.json")) if args.tiny else json.load(open("configs_template/config_template.json"))
+    config_template =  json.load(open("configs/config_template.json"))
     train = []
     val = []
     idx = 0
@@ -82,12 +82,6 @@ if __name__ == "__main__":
             wavpath = fname
             f.write(wavpath + "\n")
 
-
-    d_config_template = du.load_config("configs_template/diffusion_template.yaml")
-    d_config_template["model"]["n_spk"] = spk_id
-    d_config_template["data"]["encoder"] = args.speech_encoder
-    d_config_template["spk"] = spk_dict
-    
     config_template["spk"] = spk_dict
     config_template["model"]["n_speakers"] = spk_id
     config_template["model"]["speech_encoder"] = args.speech_encoder
@@ -114,5 +108,3 @@ if __name__ == "__main__":
     logger.info("Writing to configs/config.json")
     with open("configs/config.json", "w") as f:
         json.dump(config_template, f, indent=2)
-    logger.info("Writing to configs/diffusion.yaml")
-    du.save_config("configs/diffusion.yaml",d_config_template)
