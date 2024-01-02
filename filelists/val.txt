@@ -1,0 +1,2 @@
+./dataset/44k/ganyu/vo_EQHDJ201_5_ganyu_08.wav
+./dataset/44k/ganyu/vo_EQHDJ202_1_ganyu_10.wav
